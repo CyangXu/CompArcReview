@@ -1,18 +1,18 @@
-# Memory Hierarchy
-<!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
+<!-- MDTOC maxdepth:6 firsth1:1 numbering:0 flatten:0 bullets:1 updateOnSave:1 -->
 
-- [Memory Hierarchy](#memory-hierarchy)
-		- [1. Incentive of using memory hierarchy](#1-incentive-of-using-memory-hierarchy)
-		- [2. Designers' target](#2-designers-target)
-		- [3. When to write cache data into memory](#3-when-to-write-cache-data-into-memory)
-		- [4. Categories of cache misses](#4-categories-of-cache-misses)
-		- [5. Relationship between miss rate and misses per instruction](#5-relationship-between-miss-rate-and-misses-per-instruction)
-		- [6. CPU execution time and cache misses](#6-cpu-execution-time-and-cache-misses)
-		- [7. Misses per instruction](#7-misses-per-instruction)
-		- [8. Pros and cons of Misses per instruction](#8-pros-and-cons-of-misses-per-instruction)
-		- [9. Basic questions about cache](#9-basic-questions-about-cache)
+   - [Memory hierarchy](#memory-hierarchy)   
+      - [1. Incentive of using memory hierarchy](#1-incentive-of-using-memory-hierarchy)   
+      - [2. Designers' target](#2-designers-target)   
+      - [3. When to write cache data into memory](#3-when-to-write-cache-data-into-memory)   
+      - [4. Categories of cache misses](#4-categories-of-cache-misses)   
+      - [5. Relationship between miss rate and misses per instruction](#5-relationship-between-miss-rate-and-misses-per-instruction)   
+      - [6. CPU execution time and cache misses](#6-cpu-execution-time-and-cache-misses)   
+      - [7. Misses per instruction](#7-misses-per-instruction)   
+      - [8. Pros and cons of Misses per instruction](#8-pros-and-cons-of-misses-per-instruction)   
+      - [9. Basic questions about cache](#9-basic-questions-about-cache)   
 
-<!-- /TOC -->
+<!-- /MDTOC -->
+## Memory hierarchy
 ### 1. Incentive of using memory hierarchy  
 The increasing gap between the performance of CPU and memory
 ### 2. Designers' target
