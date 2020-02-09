@@ -13,3 +13,5 @@ Traditionally, the average memory access time. For PMD, power efficiency is more
 
 ### 5. Relationship between miss rate and misses per instruction
 ![alt text](data/equation1.png)
+### 6. CPU execution time and cache misses
+![alt text](data/equation2.png)
