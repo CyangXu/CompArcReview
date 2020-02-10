@@ -12,6 +12,8 @@
       - [9. Basic questions about cache](#9-basic-questions-about-cache)   
       - [10. Average memory access time](#10-average-memory-access-time)   
       - [11. Average Memory Access Time and Processor performance](#11-average-memory-access-time-and-processor-performance)   
+      - [12. Miss penalty and out-of-order execution processor](#12-miss-penalty-and-out-of-order-execution-processor)   
+      - [13. Six Basic Cache Optimizations](#13-six-basic-cache-optimizations)   
 
 <!-- /MDTOC -->
 ## Memory hierarchy
@@ -73,3 +75,17 @@ Traditionally, the average memory access time. For PMD, power efficiency is more
 ![alt text](data/equation5.png)
 
 ![alt text](data/equation6.png)   
+
+### 12. Miss penalty and out-of-order execution processor
+![alt text](data/equation7.png)
+
+### 13. Six Basic Cache Optimizations
+- First Optimization: Large Block size to reduce miss rate
+  - Reduce Compulsory misses
+  - Increase the miss penalty
+  - Increase the conflict misses
+  - Popular block size: 32 bytes for 4 KB & 64 bytes for larger cache
+- Second Optimization: Larger cache to reduce the miss rate
+- Third Optimization: Higher associativity to reduce miss rate
+  - 2:1 Cache rule of thumb: a direct-mapped cache of size N has the same miss rate as a two-way set associative cache of size N/2
+- Forth Optimization: Multilevel caches to reduce miss penalty 
