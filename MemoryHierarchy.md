@@ -10,6 +10,8 @@
       - [7. Misses per instruction](#7-misses-per-instruction)   
       - [8. Pros and cons of Misses per instruction](#8-pros-and-cons-of-misses-per-instruction)   
       - [9. Basic questions about cache](#9-basic-questions-about-cache)   
+      - [10. Average memory access time](#10-average-memory-access-time)   
+      - [11. Average Memory Access Time and Processor performance](#11-average-memory-access-time-and-processor-performance)   
 
 <!-- /MDTOC -->
 ## Memory hierarchy
@@ -59,4 +61,15 @@ Traditionally, the average memory access time. For PMD, power efficiency is more
     - dirty bit
   - Options when a write miss:
     - Write allocate (usually coupled with write-back)
-    - No-write allocate (usually coupled with write-through)
+    - No-write allocate (usually coupled with write-through)  
+
+### 10. Average memory access time
+![alt text](data/equation4.png)
+
+### 11. Average Memory Access Time and Processor performance
+- There are other reasons for CPU stall besides cache miss.
+- Depending on the type of CPU. For the in-order execution CPU, the answer is yes.
+
+![alt text](data/equation5.png)
+
+![alt text](data/equation6.png)   
