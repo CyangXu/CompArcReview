@@ -190,8 +190,10 @@ Compiler-controlled prefetching||+|+||3|Needs nonblocking cache; possible instru
     - Synchronous DRAM (SDRAM)
     - Double data rate (DDR)
   - Naming of DRAM
+  
     Standard | Clock rate (MHz) | M transfers per second | DRAM name | MB/sec/DIMM | DIMM name
     --- |---|---|---|---|---|
     DDR3 | 533 | 1066 | DDR3-1066 | 8528 | PC8500  
+
   - Graphics Data RAMs
     - Because of the lower locality of memory request in a GPU, burst mode generally is less useful for a GPU, but keeping open multiple memory banks and managing their use improves effective bandwidth.
