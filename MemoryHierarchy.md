@@ -17,6 +17,9 @@
       - [14 Summary of basic cache optimizations](#14-summary-of-basic-cache-optimizations)   
       - [15 Ten advanced optimizations of cache performance](#15-ten-advanced-optimizations-of-cache-performance)   
       - [16 Cache optimization summary](#16-cache-optimization-summary)   
+      - [17 Main memory Basics](#17-main-memory-basics)   
+      - [18 SRAM Technology](#18-sram-technology)   
+      - [19 DRAM Technology](#19-dram-technology)   
 
 <!-- /MDTOC -->
 ## Memory hierarchy
@@ -167,3 +170,28 @@ Critical word first and early restart|||+||1|Widely used with write through
 Compiler techniques to reduce cache misses|||+||0|Software is challenging but many compilers handle common linear algebra calculations
 Hardware prefetching of instructions and data||+|+|-|2 instr. 3 data | Most provide prefetch instructions
 Compiler-controlled prefetching||+|+||3|Needs nonblocking cache; possible instruction overhead; widely used
+
+### 17 Main memory Basics
+  - Main memory latency is the primary concern of the cache, while main memory bandwidth is the primary concern of multiprocessors and I/O.
+  - access time: time between when a read is requested and when the desired word arrives
+  - Cycle time: the minimum time between unrelated requests to memory
+
+### 18 SRAM Technology
+  - No refresh
+  - Six transistors per bit
+  - Around three to five times faster than accessing DRAM memory
+
+### 19 DRAM Technology
+  - One single transistor to store data. Must restore data after reading
+  - Refresh data periodically meaning that DRAM is occasionally unavailable
+  - Dual inline memory modules (DIMMs)
+  - Improvements in DRAM performance:
+    - Adding timing signals that allow repeated accesses to the row buffer without another row access time.
+    - Synchronous DRAM (SDRAM)
+    - Double data rate (DDR)
+  - Naming of DRAM
+    Standard | Clock rate (MHz) | M transfers per second | DRAM name | MB/sec/DIMM | DIMM name
+    --- |---|---|---|---|---|
+    DDR3 | 533 | 1066 | DDR3-1066 | 8528 | PC8500  
+  - Graphics Data RAMs
+    - Because of the lower locality of memory request in a GPU, burst mode generally is less useful for a GPU, but keeping open multiple memory banks and managing their use improves effective bandwidth.
