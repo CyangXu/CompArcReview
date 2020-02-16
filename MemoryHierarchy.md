@@ -14,6 +14,7 @@
       - [11. Average Memory Access Time and Processor performance](#11-average-memory-access-time-and-processor-performance)   
       - [12. Miss penalty and out-of-order execution processor](#12-miss-penalty-and-out-of-order-execution-processor)   
       - [13. Six Basic Cache Optimizations](#13-six-basic-cache-optimizations)   
+      - [14 Summary of basic cache optimizations](#14-summary-of-basic-cache-optimizations)   
 
 <!-- /MDTOC -->
 ## Memory hierarchy
