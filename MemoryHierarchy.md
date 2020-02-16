@@ -15,6 +15,8 @@
       - [12. Miss penalty and out-of-order execution processor](#12-miss-penalty-and-out-of-order-execution-processor)   
       - [13. Six Basic Cache Optimizations](#13-six-basic-cache-optimizations)   
       - [14 Summary of basic cache optimizations](#14-summary-of-basic-cache-optimizations)   
+      - [15 Ten advanced optimizations of cache performance](#15-ten-advanced-optimizations-of-cache-performance)   
+      - [16 Cache optimization summary](#16-cache-optimization-summary)   
 
 <!-- /MDTOC -->
 ## Memory hierarchy
@@ -118,3 +120,50 @@ Higher associativity |-||+|1|Widely used
 Multilevel cache||+||2|Costly hardware; harder if L1 block size != L2 block size; widely used
 Read priority over writes||+||1|Widely used
 Avoiding address translation during cache indexing | +|||1|Widely used
+
+### 15 Ten advanced optimizations of cache performance
+  - Categories of cache performance optimizations:
+    - Reducing the hit Time
+    - Increasing cache bandwidth
+    - Reducing the miss penalty
+    - Reducing the miss rate
+    - Reducing the miss penalty or miss rate via parallelism
+  - First optimization: Small and simple first-level caches to reduce hit time and power
+    - The pressure of both a fast clock cycle and power limitations encourages limited size for first-level caches.
+    - One approach to determining the impact on hit time and power consumption in advance of building a chip is to use CAD tools, such as CACTI.
+    - Recently three factors have led to the use of higher associativity in first-level caches:
+      - Many processors take at least two clock cycles to access the cache and thus the impact of a longer hit time may not be critical
+      - Almost all L1 caches should be virtually indexed to keep the TLB out of the critical path. This limits the size of the cache to the page size times the associativity.
+      - With the introduction of multithreading, conflict misses can increase, making higher associativity more attractive.
+  - Second optimization: way prediction to reduce hit time
+    - Way prediction and way access
+  - Third optimization: pipelined cache access to increase cache bandwidth
+  - Fourth optimization: nonblocking caches to increase cache bandwidth
+    - hit under miss and hit under multiple miss
+    - Difficult to evaluate the performance: a cache does not necessarily stall the processor
+  - Fifth optimization: multibanked caches to increase cache bandwidth
+    - Help to reduce the power as well.
+  - Sixth optimization: critical word first and early restart to reduce miss penalty
+  - Seventh optimization: merging write buffer to reduce miss penalty
+    - Note that input/output device registers are often mapped into the physical address space. These I/O addresses cannot allow wirte merging.
+  - Eighth optimization: compiler optimizations to reduce miss rate
+    - Some examples: loop interchange & blocking
+  - Ninth optimization: hardware prefetching of instructions and data to reduce miss penalty or miss rate.
+  - Tenth optimization: compiler-controlled prefetching to reduce miss penalty or miss rate
+    - Compilers to insert prefetch instructions to request data before the processor needs it.
+    - Register prefetch and cache prefetch
+    - faulting and non-faulting
+    - Software pipelining
+
+### 16 Cache optimization summary
+Technique | Hit time | Bandwidth | Miss penalty | Power consumption | Hardware cost/complexity | comment
+--- | --- | --- | ---| --- | --- | --- |     
+Small and simple cache | + | |-|+|0|Trivial; widely used
+Way-predicting caches|+|||+|1|Used in Pentium 4
+Pipelined cache access|-|+|||1|Widely used
+Nonblocking caches||+|+||3|Widely used
+Banked caches|+|||+|1|Used in L2 of both i7 and Cortex-A8
+Critical word first and early restart|||+||1|Widely used with write through
+Compiler techniques to reduce cache misses|||+||0|Software is challenging but many compilers handle common linear algebra calculations
+Hardware prefetching of instructions and data||+|+|-|2 instr. 3 data | Most provide prefetch instructions
+Compiler-controlled prefetching||+|+||3|Needs nonblocking cache; possible instruction overhead; widely used
