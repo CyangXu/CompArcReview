@@ -88,4 +88,32 @@ Traditionally, the average memory access time. For PMD, power efficiency is more
 - Second Optimization: Larger cache to reduce the miss rate
 - Third Optimization: Higher associativity to reduce miss rate
   - 2:1 Cache rule of thumb: a direct-mapped cache of size N has the same miss rate as a two-way set associative cache of size N/2
-- Forth Optimization: Multilevel caches to reduce miss penalty 
+- Forth Optimization: Multilevel caches to reduce miss penalty
+  - Question about cache: Should I make the cache faster to keep pace with the speed of processors, or make the cache larger to overcome the widening gap between the processor and main memory?
+  - ![alt text](data/equation8.png)
+  - ![alt text](data/equation9.png)
+  - For second-level caches, there are many fewer hits than in the first-level cache, so the emphasis shifts to fewer misses. This insight leads to much larger caches and techniques to lower the miss rate, such as higher associativity and larger blocks.
+- Fifth Optimization: Giving priority to read misses over writes to reduce miss penalty
+  - To solve read-after-write data hazard.
+  - Checks the contents of the write buffer on a read miss, and if there are no conflicts and the memory system is available, let the read miss continue.
+- Sixth Optimization: Avoiding address translation during indexing of the cache to reduce hit time
+  - Physical cache and virtual cache
+  - Indexing the cache and comparing addresses with physical address or virtual address.
+  - Pros and cons of full virtual addressing for both indices and tag:
+    - Pros: Eliminates address translation time from a cache hit.
+    - Cons:
+      - Page protection
+      - Cache is flushed after switching the process
+      - OS and user programs may use two different virtual addresses for the same physical address. Hardware solutions called antialiasing guarantee every cache block a unique physical address. Software methods like page coloring can also make this problem easier to handle.
+      - IO usually uses physical addresses and this would require mapping to virtual addresses to interact with a virtual cache.
+   - virtually indexed and physically tagged. However, the limitation of this method is that a direct-mapped cache can be no bigger than the page size. If we introduce the associativity in this approach, a bigger cache will be allowed.
+
+### 14 Summary of basic cache optimizations
+Technique | Hit time | Miss penalty | Miss rate | Hardware complexity | comment
+--- | --- | --- | --- | --- | --- |
+Larger block size | |-|+|0|Trival;Pentium 4 uses it
+Larger cache size | - | | + |1|Widely used, especially for L2 caches
+Higher associativity |-||+|1|Widely used
+Multilevel cache||+||2|Costly hardware; harder if L1 block size != L2 block size; widely used
+Read priority over writes||+||1|Widely used
+Avoiding address translation during cache indexing | +|||1|Widely used
