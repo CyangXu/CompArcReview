@@ -20,6 +20,10 @@
       - [17 Main memory Basics](#17-main-memory-basics)   
       - [18 SRAM Technology](#18-sram-technology)   
       - [19 DRAM Technology](#19-dram-technology)   
+      - [20  Flash Memory](#20-flash-memory)   
+      - [21 Enhancing dependability in memory systems](#21-enhancing-dependability-in-memory-systems)   
+      - [22 Virtual Machines](#22-virtual-machines)   
+      - [23 I/O cache coherency](#23-io-cache-coherency)   
 
 <!-- /MDTOC -->
 ## Memory hierarchy
@@ -190,10 +194,40 @@ Compiler-controlled prefetching||+|+||3|Needs nonblocking cache; possible instru
     - Synchronous DRAM (SDRAM)
     - Double data rate (DDR)
   - Naming of DRAM
-  
+
     Standard | Clock rate (MHz) | M transfers per second | DRAM name | MB/sec/DIMM | DIMM name
     --- |---|---|---|---|---|
     DDR3 | 533 | 1066 | DDR3-1066 | 8528 | PC8500  
 
   - Graphics Data RAMs
     - Because of the lower locality of memory request in a GPU, burst mode generally is less useful for a GPU, but keeping open multiple memory banks and managing their use improves effective bandwidth.
+  - Reducing Power
+    - Voltage drops
+    - Power down mode
+
+### 20  Flash Memory
+  - A type of Electronically Erasable Programmable Read-Only Memory
+  - Differences between Flash and DRAM:
+    - Flash memory must be erased before writes and it is erased in blocks.
+    - Flash memory is static and draws significantly less power when not reading or writing.
+    - Each block has limited write cycles.
+    - Flash is cheaper and slower than SDRAM and more expensive and faster than disk.
+
+### 21 Enhancing dependability in memory systems
+  - Soft errors and hard errors
+  - Error correcting codes (ECCs). Usually ECC can detect two errors and correct a single error with a cost of eight bits of overhead per 64 data bits.
+  - Chipkill instead of ECC is used by a very large memory system.
+
+### 22 Virtual Machines
+ - System virtual machine
+ - Virtual machine monitor
+ - Qualitive requirements of a virtual machine monitor:
+   - Guest software should behave on a VM exactly as if it were running on the native hardware, except for performance-related behavior or limitations of fixed resources shared by multiple VMs
+   - Guest software should not be able to change allocation of real system resources directly
+ - A problem: lack of instruction set architecture support for virtual machines
+ - Shadow page table: mapping directly from the guest virtual address space to the physical address space of the hardware
+ - Paravirtualization: allowing small modifications to the guest OS to simplify virtualization. An example is Xen VMM. In VMM: driver domains and guest domains.
+
+### 23 I/O cache coherency
+  - Usually use write-through between I/O device and memory
+  - Usually ensures that no blocks of the input buffer are in the cache
