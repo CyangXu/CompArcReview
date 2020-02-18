@@ -6,6 +6,8 @@
       - [3 Major techniques utilizing ILP](#3-major-techniques-utilizing-ilp)   
       - [4 Type of dependences](#4-type-of-dependences)   
       - [5 Data hazards](#5-data-hazards)   
+      - [6 Basic compiler techniques for exposing ILP](#6-basic-compiler-techniques-for-exposing-ilp)   
+      - [7 Reducing branch costs with advanced branch prediction](#7-reducing-branch-costs-with-advanced-branch-prediction)   
 
 <!-- /MDTOC -->
 
@@ -46,3 +48,15 @@ Hardware support for compiler speculation | Ideal CPI, data hazard stalls, branc
   - RAW
   - WAW
   - WAR
+
+### 6 Basic compiler techniques for exposing ILP
+  - Basic pipeline scheduling and loop unrolling
+  - Three different effects limit the gains from loop unrolling:
+    - A decrease in the amount of overhead amortized with each unroll
+    - Code size limitations
+    - Compiler limitations
+
+### 7 Reducing branch costs with advanced branch prediction
+  - Correlating branch predictors
+    - (m, n) predictor uses the behavior of the last m branches to choose from 2^m branch predictors, each of which is an n-bit predictor for a single branch
+  - Tournament predictors: adaptively combining local and global predictors
