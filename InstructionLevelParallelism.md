@@ -134,23 +134,23 @@ Hardware support for compiler speculation | Ideal CPI, data hazard stalls, branc
   ```
 - Result of the first three iterations
 
-  Iteration Number | Instructions | Issues at clock cycle number | Executes at clock cycle number | Memory access at clock cycle number | Write CDB at clock cycle number | Comment
-   ---| --- | --- | --- | --- | --- | --- |
-   1 | LD R2,0(R1) | 1 | 2 | 3 | 4 | First issue
-   1 |DADDIU R2,R2,#1 | 1 | 5 ||6|Wait for LW
-   1 |SD R2,0(R1)|2|3|7||Wait for DADDIU
-   1 |DADDIU R1,R1,#8|2|3||4|Execute directly
-   1 |BNE R2,R3,Loop|3|7|||Wait for DADDIU
-   2 | LD R2,0(R1) | 4 | 8 | 9 | 10 | Wait for BNE
-   2 |DADDIU R2,R2,#1 |4| 11 ||12|Wait for LW
-   2 |SD R2,0(R1)|5|9|13||Wait for DADDIU
-   2 |DADDIU R1,R1,#8|5|8||9|Wait for SD
-   2 |BNE R2,R3,Loop|6|13|||Wait for DADDIU
-   3 | LD R2,0(R1) | 7 | 14 | 15 | 16 | Wait for BNE
-   3 |DADDIU R2,R2,#1 | 7 | 17 ||18|Wait for LW
-   3 |SD R2,0(R1)|8|14|19|||Wait for DADDIU
-   3 |DADDIU R1,R1,#8|8|14||15|Wait for BNE
-   3 |BNE R2,R3,Loop|9|19|||Wait for DADDIU
+ Iteration Number | Instructions | Issues at clock cycle number | Executes at clock cycle number | Memory access at clock cycle number | Write CDB at clock cycle number | Comment
+ ---| --- | --- | --- | --- | --- | --- |
+ 1 | LD R2,0(R1) | 1 | 2 | 3 | 4 | First issue
+ 1 |DADDIU R2,R2,#1 | 1 | 5 ||6|Wait for LW
+ 1 |SD R2,0(R1)|2|3|7||Wait for DADDIU
+ 1 |DADDIU R1,R1,#8|2|3||4|Execute directly
+ 1 |BNE R2,R3,Loop|3|7|||Wait for DADDIU
+ 2 | LD R2,0(R1) | 4 | 8 | 9 | 10 | Wait for BNE
+ 2 |DADDIU R2,R2,#1 |4| 11 ||12|Wait for LW
+ 2 |SD R2,0(R1)|5|9|13||Wait for DADDIU
+ 2 |DADDIU R1,R1,#8|5|8||9|Wait for SD
+ 2 |BNE R2,R3,Loop|6|13|||Wait for DADDIU
+ 3 | LD R2,0(R1) | 7 | 14 | 15 | 16 | Wait for BNE
+ 3 |DADDIU R2,R2,#1 | 7 | 17 ||18|Wait for LW
+ 3 |SD R2,0(R1)|8|14|19|||Wait for DADDIU
+ 3 |DADDIU R1,R1,#8|8|14||15|Wait for BNE
+ 3 |BNE R2,R3,Loop|9|19|||Wait for DADDIU
 - Example of ILP without branch speculation: Result of the first three iterations
 
 Iteration Number | Instructions | Issues at clock cycle number | Executes at clock cycle number | Read access at clock cycle number | Write CDB at clock cycle number | Commits at clock numner | Comment
