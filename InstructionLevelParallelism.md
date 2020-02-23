@@ -132,7 +132,7 @@ Hardware support for compiler speculation | Ideal CPI, data hazard stalls, branc
         DADDIU R1,R1,#8   ;increment pointer
         BNE    R2,R3,Loop ;branch if not last element
   ```
-  - Result of the first three iterations
+- Result of the first three iterations
 
   Iteration Number | Instructions | Issues at clock cycle number | Executes at clock cycle number | Memory access at clock cycle number | Write CDB at clock cycle number | Comment
    ---| --- | --- | --- | --- | --- | --- |
@@ -151,8 +151,7 @@ Hardware support for compiler speculation | Ideal CPI, data hazard stalls, branc
    3 |SD R2,0(R1)|8|14|19|||Wait for DADDIU
    3 |DADDIU R1,R1,#8|8|14||15|Wait for BNE
    3 |BNE R2,R3,Loop|9|19|||Wait for DADDIU
-- Example of ILP without branch speculation
-- Result of the first three iterations
+- Example of ILP without branch speculation: Result of the first three iterations
 
 Iteration Number | Instructions | Issues at clock cycle number | Executes at clock cycle number | Read access at clock cycle number | Write CDB at clock cycle number | Commits at clock numner | Comment
  ---| --- | --- | --- | --- | --- | --- |--- |
@@ -200,6 +199,7 @@ Iteration Number | Instructions | Issues at clock cycle number | Executes at clo
       - pros: less likely to slow down the individual thread speed.
       - cons: Limited to overcome throughput losses.
     - Simultaneous multithreading (SMT)
+  - In 2011, the balance between offering multiple simpler cores and fewer more sophisticated cores has shifted in favor of more cores, with each core typically being a three to four issue superscalar with SMT supporting two to four threads.
 
 ### 12 Summary
 Common name | issue structure | hazard detection | scheduling | distinguishing characteristic | example
