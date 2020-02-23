@@ -133,6 +133,7 @@ Hardware support for compiler speculation | Ideal CPI, data hazard stalls, branc
         BNE    R2,R3,Loop ;branch if not last element
   ```
   - Result of the first three iterations
+
   Iteration Number | Instructions | Issues at clock cycle number | Executes at clock cycle number | Memory access at clock cycle number | Write CDB at clock cycle number | Comment
    ---| --- | --- | --- | --- | --- | --- |
    1 | LD R2,0(R1) | 1 | 2 | 3 | 4 | First issue
@@ -152,6 +153,7 @@ Hardware support for compiler speculation | Ideal CPI, data hazard stalls, branc
    3 |BNE R2,R3,Loop|9|19|||Wait for DADDIU
 - Example of ILP without branch speculation
 - Result of the first three iterations
+
 Iteration Number | Instructions | Issues at clock cycle number | Executes at clock cycle number | Read access at clock cycle number | Write CDB at clock cycle number | Commits at clock numner | Comment
  ---| --- | --- | --- | --- | --- | --- |--- |
  1 | LD R2,0(R1) | 1 | 2 | 3 | 4 | 5 | First issue
