@@ -101,3 +101,109 @@ Hardware support for compiler speculation | Ideal CPI, data hazard stalls, branc
     - ROB becomes the source of operands. The ROB entry index is used to tag the result.
     - When a branch with incorrect prediction reaches the head of the ROB, it indicates that the speculation was wrong. The ROB is flushed and execution is restarted at the correct branch.
   - In-order commit can ensure the precise exception which the basic Tomasulo algorithm cannot achieve. However, imprecise floating-point exception is deemed acceptable.
+  - In practice, processors that speculate try to recover as early as possible. This recovery can be done by clearing the ROB for all entries that appear after the mispredicted branch.
+
+### 11 Exploiting ILP using multiple issue and static scheduling
+ - Multiple-issue processors come in three major flavors:
+   - Statically scheduled superscalar processors
+   - VLIW(very long instruction word) processors
+   - Dynamically scheduled superscalar processors
+ - Because of the diminishing advantages of a statically scheduled superscalar as the issue width grows, statically scheduled superscalars are used primarily for narrow issue widths, normally just two instructions. Beyond that width, most designers chose to implement either a VLIW or a dynamically scheduled superscalar.
+ - A VLIW packages the multiple operations into one very long instruction, or requires that the instructions in the issue packet satisfy the same constraints.
+ - Cos of VLIW:
+   - Generating enough operations in a straight-line code fragment requires ambitiously unrolling loops, thereby increasing code size
+   - Whenever instructions are not full, the unused functional units translate to wasted bits in the instruction encoding.
+  - To combat the code size increase:
+    - using clever encoding: for example, there may be only one large immediate field for use by any function unit.
+    - Compressing the instructions in main memory and expanding them when they are read into cache or memory.
+  - Binary code compatibility is a major logistical problem
+
+### 11 Exploiting ILP using dynamic scheduling, multiple issue, and speculation
+- Reason why processor becomes complex in this way:
+- Two approaches to issue multiple instructions per clock in a dynamically scheduled processor:
+  - Run this step in half a clock cycle. But it cannot extended to four instructions per clock easily.
+  - Build the logic necessary to handle two or more instructions at once, including any possible dependences between the instructions.
+- Example of ILP execution without branch speculation
+  - Assume that there are sperate integer functional units for effective address calculation, ALU operation, branch condition evaluation. Two instructions can be issued in one cycle.
+  ```
+  Loop: LD     R2,0(R1)   ;R2=array element
+        DADDIU R2,R2,#1   ;increment R2
+        SD     R2,0(R1)   ;store result
+        DADDIU R1,R1,#8   ;increment pointer
+        BNE    R2,R3,Loop ;branch if not last element
+  ```
+  - Result of the first three iterations
+  Iteration Number | Instructions | Issues at clock cycle number | Executes at clock cycle number | Memory access at clock cycle number | Write CDB at clock cycle number | Comment
+   ---| --- | --- | --- | --- | --- | --- |
+   1 | LD R2,0(R1) | 1 | 2 | 3 | 4 | First issue
+   1 |DADDIU R2,R2,#1 | 1 | 5 ||6|Wait for LW
+   1 |SD R2,0(R1)|2|3|7||Wait for DADDIU
+   1 |DADDIU R1,R1,#8|2|3||4|Execute directly
+   1 |BNE R2,R3,Loop|3|7|||Wait for DADDIU
+   2 | LD R2,0(R1) | 4 | 8 | 9 | 10 | Wait for BNE
+   2 |DADDIU R2,R2,#1 |4| 11 ||12|Wait for LW
+   2 |SD R2,0(R1)|5|9|13||Wait for DADDIU
+   2 |DADDIU R1,R1,#8|5|8||9|Wait for SD
+   2 |BNE R2,R3,Loop|6|13|||Wait for DADDIU
+   3 | LD R2,0(R1) | 7 | 14 | 15 | 16 | Wait for BNE
+   3 |DADDIU R2,R2,#1 | 7 | 17 ||18|Wait for LW
+   3 |SD R2,0(R1)|8|14|19|||Wait for DADDIU
+   3 |DADDIU R1,R1,#8|8|14||15|Wait for BNE
+   3 |BNE R2,R3,Loop|9|19|||Wait for DADDIU
+- Example of ILP without branch speculation
+- Result of the first three iterations
+Iteration Number | Instructions | Issues at clock cycle number | Executes at clock cycle number | Read access at clock cycle number | Write CDB at clock cycle number | Commits at clock numner | Comment
+ ---| --- | --- | --- | --- | --- | --- |--- |
+ 1 | LD R2,0(R1) | 1 | 2 | 3 | 4 | 5 | First issue
+ 1 |DADDIU R2,R2,#1 | 1 | 5 ||6|7|Wait for LW
+ 1 |SD R2,0(R1)|2|3|||7|Wait for DADDIU
+ 1 |DADDIU R1,R1,#8|2|3||4|8|Commit in order
+ 1 |BNE R2,R3,Loop|3|7|||8|Wait for DADDIU
+ 2 | LD R2,0(R1) | 4 | 5 |6| 7 | 9 | First issue
+ 2 |DADDIU R2,R2,#1 | 4 | 8 ||9|10|Wait for LW
+ 2 |SD R2,0(R1)|5|6|||10|Wait for DADDIU
+ 2 |DADDIU R1,R1,#8|5|6||7|11|Execute directly
+ 2 |BNE R2,R3,Loop|6|10|||11|Wait for DADDIU
+ 3 | LD R2,0(R1) |7|8|9|10 | 12 | Wait for commit
+ 3 |DADDIU R2,R2,#1 |7|11||12|13|Wait for LW
+ 3 |SD R2,0(R1)|8|9|||13|Wait for DADDIU
+ 3 |DADDIU R1,R1,#8|8|9||10|14|Wait for commit
+ 3 |BNE R2,R3,Loop|9|13|||14|Wait for DADDIU
+
+### 14 Advanced techniques for instruction delivery and speculation
+- Increasing instruction fetch bandwidth
+  - Branch-target buffer
+    - A branch-target buffer predicts the next instruction address and will send it out before decoding the instruction.
+    - Note that unlike a branch-prediction buffer, the predictive entry must be matched to this instruction because the predicted PC will be sent out before it is known whether this instruction is even a branch.
+  - Return address predictors
+    - Incentive: The challenge of predicting indirect jumps, that is, jumps whose destination address varies at runtime. Although procedure returns can be predicted with a branch-target-buffer, the accuracy of such a prediction technique can be low if the procedure is called from multiple sites and the calls from one site are not clustered in time.
+  - Integrated instruction fetch units
+    - Integrated branch prediction
+    - Instruction prefetch
+    -  Instruction memory access and buffering
+
+### 15 Studies of the limitations of ILP
+  - History: ILP is utilized since 1960s. Engineers were enforced to change their persistence in ILP around 2005 because of the power inefficiency and too high use of silicon brought by aggressive ILP strategies.
+  -  
+
+### 16 Multithreading: exploiting thread-level parallelism to improve uniprocessor throughput
+  - Incentive: ILP can be quite limited to utilize. For example, with reasonable instruction issue rates, cache misses that go to memory or off-chip caches are unlikely to be hidden by available ILP. In addition, when the processor is stalled, the utilization of the functional units drops dramatically.
+  - Duplicating the per-thread state of a processor core means creating a separate register file, a separate PC, and a separate page table for each thread.
+  - Three hardware ways to multithreading:
+    - Fine grained multi-threading
+      - pros: Hide the throughput losses that arise from both short and long stalls.
+      - cons: Slow down the execution of an individual thread
+      - applications: Sun Niagara processor, Nvidia GPUs
+    - Coarse grained multithreading
+      - pros: less likely to slow down the individual thread speed.
+      - cons: Limited to overcome throughput losses.
+    - Simultaneous multithreading (SMT)
+
+### 12 Summary
+Common name | issue structure | hazard detection | scheduling | distinguishing characteristic | example
+ --- | --- | --- | --- | --- | ---
+ Superscalar (static) | dynamic | hardware | static | in-order execution | mostly in the embedded space: MIPS and ARM, including the ARM Cortex-A8
+ Superscalar (dynamic) | dynamic | hardware | dynamic | some out-of-order execution, but no speculation | none at the present
+ Superscalar (speculative) | dynamic | hardware | Dynamic with speculation | out-of-order execution with speculation | Intel Core i3, i5, i7; AMD Phenom; IBM Power 7
+ VLIW/LIW | static | Primarily software | Static | All hazards determined and indicated by compiler | Most examples are in signal processing, such as the TIC6x
+ EPIC | Primarily static | Primarily software | Mostly static | All hazards determined and indicated explicitly by the compiler | Itanium
