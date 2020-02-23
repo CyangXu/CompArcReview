@@ -201,6 +201,20 @@ Iteration Number | Instructions | Issues at clock cycle number | Executes at clo
     - Simultaneous multithreading (SMT)
   - In 2011, the balance between offering multiple simpler cores and fewer more sophisticated cores has shifted in favor of more cores, with each core typically being a three to four issue superscalar with SMT supporting two to four threads.
 
+### 17 The intel core i7 and ARM Cortex-A8
+ - The ARM Cortex-A8
+   - A dual-issue, statically scheduled superscalar with dynamic issue detection, which allows the processor to issue one or two instructions per clock.
+- The Intel Core-i7
+   - instruction fetch
+   - predecode instruction buffer
+   - micro-op decode      
+   - loop stream detection and microfusion
+   - basic instruction issues
+   - centralized reservation station
+   - executing micro-ops
+   - write data
+
+
 ### 12 Summary
 Common name | issue structure | hazard detection | scheduling | distinguishing characteristic | example
  --- | --- | --- | --- | --- | ---
