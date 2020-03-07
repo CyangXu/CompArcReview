@@ -146,4 +146,4 @@
     - Note that the protocol above is simplified: nonatomic memory transaction should be dealt with.
     - Optimization in commercial CPU: when a read or write miss occurs for a exclusive block, instead of sending the block to the directory at the home node then storing into the home memory and sending to the original requesting node, the data is forwarded from the owner node the requesting node directly.
 
-### 10 Synchronization: the basics 
+### 10 Synchronization: the basics
