@@ -106,3 +106,44 @@
 ### 8 Distributed shared-memory and director-based coherence
   - A directory keeps the state of every block that may be cached. The information includes which caches have copies of the block, whether it is dirty, and so on.
   - Simplest implementation: It associates an entry in the directory with each memory block. The amount of information is proportional to the product of the number of memory blocks (where each block is the same size as the L2 or L3 cache block) times the number of nodes, where a node is a single multicore processor or a small collection of processors that implements coherence internally.
+  - Downside of the simple implementation: Not work for supercomputer-sized systems.
+
+### 9 Directory-based cache coherence protocols
+  - Track the state of each potentially shared memory block:
+    - Shared - One or more nodes have the block cached, and the value in memory is up to date.
+    - Uncached - No node has a copy of the cache block.
+    - Modified - Exactly one node has a copy of the cache block, and it has written the block. Memory copy is out of data. The processor is called the owner of the block.
+  - Track which nodes have copies of that block
+    - Simplest way is to keep a bit vector for each memory block.
+    - Local node: the node where a request originates
+    - Home node: the node where the memory location and the directory entry of an address reside.
+    - Messages between the processors and the directory:
+
+    |Message Type | Source | Destination | Message contents | Function of this message
+    | --- | --- | --- | --- | --- |
+    Read miss | Local cache | Home directory | P, A | Node P has a read miss at address A; request data and make P a reader sharer.
+    Write miss | Local cache | Home directory | P, A | Node P has a write miss at address A; request data and make P the exclusive owner.
+    Invalidate | Local cache | Home directory | A | Request to send invalidates to all remote caches that are caching the block at address A.
+    Invalidate | Home directory | Remote cache | A | Invalidate a shared copy of data at address A.
+    Fetch | Home directory | Remote cache | A | Fetch the block at address A and sent it to its home directory; change the state of A in the remote cache to shared.
+    Fetch / Invalidate | Home directory | Remote cache | A | Fetch the block at address A and send it to its home directory; invalidate the block in the cache.
+    Data value reply | Home directory | Local cache | D | Return a data value from the home memory.
+    Data write-back | Remote cache | Home directory | A, D | Write-back a data value for address A.
+
+    - Note that the directory must be accessed when the home node is the local node, since copies may exist in yet a third node, called a remote node.
+    - The write miss operation, which was broadcast on the bus in the snooping scheme, is replaced by the data fetch and invalidate operations that are selectively sent by the director controller.
+    - The state transition of directory:
+      - Two requests for uncached block:
+        - Read miss
+        - Write miss
+      - Two requests for shared block:
+        - Read miss
+        - Write miss
+      - Three requests for exclusive block:
+        - Read miss
+        - Data write-back
+        - Write miss
+    - Note that the protocol above is simplified: nonatomic memory transaction should be dealt with.
+    - Optimization in commercial CPU: when a read or write miss occurs for a exclusive block, instead of sending the block to the directory at the home node then storing into the home memory and sending to the original requesting node, the data is forwarded from the owner node the requesting node directly.
+
+### 10 Synchronization: the basics 
