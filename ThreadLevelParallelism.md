@@ -1,4 +1,21 @@
 ## Thread-level parallelism (TLP)
+
+<!-- MDTOC maxdepth:6 firsth1:1 numbering:0 flatten:0 bullets:1 updateOnSave:1 -->
+
+   - [Thread-level parallelism (TLP)](#thread-level-parallelism-tlp)   
+      - [1 Introduction](#1-introduction)   
+      - [2 Multiprocessor architecture: issues and approach](#2-multiprocessor-architecture-issues-and-approach)   
+      - [3 Challenges of parallel processing](#3-challenges-of-parallel-processing)   
+      - [4 Cache coherence issue](#4-cache-coherence-issue)   
+      - [5 Snooping Coherence Protocol](#5-snooping-coherence-protocol)   
+      - [6 Implementing snooping cache coherence](#6-implementing-snooping-cache-coherence)   
+      - [7 Performance of symmetric shared-memory multiprocessors](#7-performance-of-symmetric-shared-memory-multiprocessors)   
+      - [8 Distributed shared-memory and director-based coherence](#8-distributed-shared-memory-and-director-based-coherence)   
+      - [9 Directory-based cache coherence protocols](#9-directory-based-cache-coherence-protocols)   
+      - [10 Synchronization: the basics](#10-synchronization-the-basics)   
+
+<!-- /MDTOC -->
+
 ### 1 Introduction
   - The view that advances in uniprocessor architecture were nearing an end has been held by some researchers for many years (even in 1970s). This view was premature before 1990s. Nonetheless, the importance of multiprocessors was growing after 1990s by the following reasons:
     - The dramatically lower efficiencies in silicon and energy use that were encountered between 2000 and 2005 as designers attempted to find and exploit more ILP
