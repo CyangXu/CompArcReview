@@ -1,4 +1,24 @@
 ## Thread-level parallelism (TLP)
+
+<!-- MDTOC maxdepth:6 firsth1:1 numbering:0 flatten:0 bullets:1 updateOnSave:1 -->
+
+   - [Thread-level parallelism (TLP)](#thread-level-parallelism-tlp)   
+      - [1 Introduction](#1-introduction)   
+      - [2 Multiprocessor architecture: issues and approach](#2-multiprocessor-architecture-issues-and-approach)   
+      - [3 Challenges of parallel processing](#3-challenges-of-parallel-processing)   
+      - [4 Cache coherence issue](#4-cache-coherence-issue)   
+      - [5 Snooping Coherence Protocol](#5-snooping-coherence-protocol)   
+      - [6 Implementing snooping cache coherence](#6-implementing-snooping-cache-coherence)   
+      - [7 Performance of symmetric shared-memory multiprocessors](#7-performance-of-symmetric-shared-memory-multiprocessors)   
+      - [8 Distributed shared-memory and director-based coherence](#8-distributed-shared-memory-and-director-based-coherence)   
+      - [9 Directory-based cache coherence protocols](#9-directory-based-cache-coherence-protocols)   
+      - [10 Synchronization: the basics](#10-synchronization-the-basics)   
+      - [11 Models of memory consistency: an introduction](#11-models-of-memory-consistency-an-introduction)   
+      - [12 Crosscutting issues](#12-crosscutting-issues)   
+      - [13 Fallacies and pitfalls](#13-fallacies-and-pitfalls)   
+
+<!-- /MDTOC -->
+
 ### 1 Introduction
   - The view that advances in uniprocessor architecture were nearing an end has been held by some researchers for many years (even in 1970s). This view was premature before 1990s. Nonetheless, the importance of multiprocessors was growing after 1990s by the following reasons:
     - The dramatically lower efficiencies in silicon and energy use that were encountered between 2000 and 2005 as designers attempted to find and exploit more ILP
@@ -147,3 +167,45 @@
     - Optimization in commercial CPU: when a read or write miss occurs for a exclusive block, instead of sending the block to the directory at the home node then storing into the home memory and sending to the original requesting node, the data is forwarded from the owner node the requesting node directly.
 
 ### 10 Synchronization: the basics
+  - Basic hardware primitives:
+    - It is the key ability of synchronization.
+    - Example atomic primitives:
+      - Atomic exchange: interchanges a value in a register for a value in memory
+      - Fetch and increment
+    - Implementation challenge: Require both a memory read and a write in a single, uninterruptible instruction. It is harder when dealing with cache coherence issue.
+    - An alternative way: Have a pair of instructions where the second instruction returns a value which it can be deduced whether the pair of instructions was executed as if the instructions were atomic.
+      - load linked (link register)
+      - store conditional
+    - Implementing locks using coherence:
+      - Spin lock:
+        - Simplest implementation (without cache coherence): keep the lock variables in memory. Then it can use the atomic exchange.
+        - With cache coherence in consideration: Cache the locks. However, it cannot use atomic exchange directly since each attempt to exchange the lock variable requires a write operation. New method should be: the spin lock procedure spins by doing reads on a local copy of the lock until it successfully sees that the lock is available; then it attempts to acquire the lock by doing a swap operation.
+
+        ~~~
+        lockit:  LDR2,    0(R1)      ;load of lock
+                 BNEZR2,  lockit     ;not available-spin
+                 DADDIUR2,R0,#1      ;load locked value
+                 EXCHR2,  0(R1)      ;swap
+                 BNEZR2,  lockit     ;branch if lock wasn't 0
+        ~~~
+       - How the new spin lock code utilizes the cache coherence:
+         - When multiple processes try to lock a variable using an atomic swap, if one process with the lock stores a 0 into the lock, all other caches are invalidated and must fetch the new value to update their copy of lock. After update, other processes will find that lock is already taken.
+
+### 11 Models of memory consistency: an introduction
+  - What properties must be enforced among reads and writes to different locations by different processors?
+  - Sequential consistency: The result of any execution is the same as if the memory accesses executed by each processor were kept in order and the accesses among different processors were arbitrarily interleaved. However, it hurts the performance.
+  - Two ways to improve the performance:
+    - Develop ambitious implementations that preserve sequential consistency but use latency-hiding techniques to reduce the penalty.
+    - Develop less restrictive memory consistency models that allow for faster hardware.
+  - The use of standard synchronization primitives ensures that even if the architecture implements a more relaxed consistency model than sequential consistency, a synchronized program will behave as if the hardware implemented sequential consistency.
+  - Relaxed consistency models: basics
+    - Relaxing W->R ordering yields a processor consistency model.
+    - Relaxing W->W ordering yields a model known as partial store order.
+    - Relaxing the R->W and R->R yields a variety of models including weak-ordering, the PowerPC consistency model, and release consistency model.
+
+### 12 Crosscutting issues
+  - Compiler optimization the consistency model: One reason for defining a model for memory consistency is to specify the range of legal compiler optimizations that can be performed on shared data.
+  - Using speculation to hide latency in strict consistency models. The state of optimization technology and the fact that shared data are often accessed via pointers or array indexing have limited the use of such optimizations.
+  - Cache inclusion. Different cache blocks in different cache levels complicates the maintenance of cache inclusion. To achieve it, we must probe the higher levels of the hierarchy when a replacement is done at the lower level to ensure that any words replaced in the lower level are invalidated in the higher level.
+
+### 13 Fallacies and pitfalls 
