@@ -13,9 +13,12 @@
       - [8 Distributed shared-memory and director-based coherence](#8-distributed-shared-memory-and-director-based-coherence)   
       - [9 Directory-based cache coherence protocols](#9-directory-based-cache-coherence-protocols)   
       - [10 Synchronization: the basics](#10-synchronization-the-basics)   
+<<<<<<< HEAD
       - [11 Models of memory consistency: an introduction](#11-models-of-memory-consistency-an-introduction)   
       - [12 Crosscutting issues](#12-crosscutting-issues)   
       - [13 Fallacies and pitfalls](#13-fallacies-and-pitfalls)   
+=======
+>>>>>>> ddec3ef91f52fc3428385f7065ab1fbc7547ffcb
 
 <!-- /MDTOC -->
 
