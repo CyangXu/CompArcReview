@@ -13,12 +13,9 @@
       - [8 Distributed shared-memory and director-based coherence](#8-distributed-shared-memory-and-director-based-coherence)   
       - [9 Directory-based cache coherence protocols](#9-directory-based-cache-coherence-protocols)   
       - [10 Synchronization: the basics](#10-synchronization-the-basics)   
-<<<<<<< HEAD
       - [11 Models of memory consistency: an introduction](#11-models-of-memory-consistency-an-introduction)   
       - [12 Crosscutting issues](#12-crosscutting-issues)   
       - [13 Fallacies and pitfalls](#13-fallacies-and-pitfalls)   
-=======
->>>>>>> ddec3ef91f52fc3428385f7065ab1fbc7547ffcb
 
 <!-- /MDTOC -->
 
@@ -211,4 +208,11 @@
   - Using speculation to hide latency in strict consistency models. The state of optimization technology and the fact that shared data are often accessed via pointers or array indexing have limited the use of such optimizations.
   - Cache inclusion. Different cache blocks in different cache levels complicates the maintenance of cache inclusion. To achieve it, we must probe the higher levels of the hierarchy when a replacement is done at the lower level to ensure that any words replaced in the lower level are invalidated in the higher level.
 
-### 13 Fallacies and pitfalls 
+### 13 Fallacies and pitfalls
+- Pitfall: Measuring performance of multiprocessors by linear speedup versus execution time.
+  - First question: the power of the processor being scaled. A program that linearly improves performance to equal 100 Intel Atom processors may be slower than the version run on an eight-core Xeon.
+  - Comparing execution time is fair only if you are comparing the best algorithms on each computer.
+  - Conclusion: comparing performance by comparing speedups is at best tricky and at worst misleading.
+- Fallacy: Linear speedups are needed to make multiprocessors cost effective
+  - Cost is not only a function of processors count but also depends on memory, I/O, and the overhead of the system (box, power supply, interconnect, and so on).
+- Pitfall: not developing the software to take advantage of, or optimize for, a multiprocessor architecture.
