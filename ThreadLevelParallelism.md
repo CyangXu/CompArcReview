@@ -209,7 +209,6 @@
   - Cache inclusion. Different cache blocks in different cache levels complicates the maintenance of cache inclusion. To achieve it, we must probe the higher levels of the hierarchy when a replacement is done at the lower level to ensure that any words replaced in the lower level are invalidated in the higher level.
 
 ### 13 Fallacies and pitfalls
-<<<<<<< HEAD
 - Pitfall: Measuring performance of multiprocessors by linear speedup versus execution time.
   - First question: the power of the processor being scaled. A program that linearly improves performance to equal 100 Intel Atom processors may be slower than the version run on an eight-core Xeon.
   - Comparing execution time is fair only if you are comparing the best algorithms on each computer.
@@ -217,5 +216,3 @@
 - Fallacy: Linear speedups are needed to make multiprocessors cost effective
   - Cost is not only a function of processors count but also depends on memory, I/O, and the overhead of the system (box, power supply, interconnect, and so on).
 - Pitfall: not developing the software to take advantage of, or optimize for, a multiprocessor architecture.
-=======
->>>>>>> abcac51f42c2f5fa46eca6cfe55eb307482f71b6
