@@ -103,7 +103,7 @@
   - In a system without a bus, there must be methods of making the steps in a miss atomic, such as serializing writes.
 
 ### 7 Performance of symmetric shared-memory multiprocessors
- - Coherence miss:
+ - Coherence miss [section 5.3]:
    - True sharing misses
    - False sharing misses:
      - It occurs when a block is invalidated because some word in the block, other than the one being read, is written into. Miss would not occur if the block size were a single word.
@@ -176,6 +176,14 @@
     - An alternative way: Have a pair of instructions where the second instruction returns a value which it can be deduced whether the pair of instructions was executed as if the instructions were atomic.
       - load linked (link register)
       - store conditional
+      - Example: LL and SC implement the exchange operation:
+        ~~~
+        try: MOV R3, R4    ;mov exchange value
+             LL  R2, 0(R1) ;load linked
+             SC  R3, 0(R1) ;store conditional
+             BEQZ R3, try  ;branch store fails
+             MOV  R4, R2   ;put load value in R4
+        ~~~
     - Implementing locks using coherence:
       - Spin lock:
         - Simplest implementation (without cache coherence): keep the lock variables in memory. Then it can use the atomic exchange.
@@ -188,6 +196,18 @@
                  EXCHR2,  0(R1)      ;swap
                  BNEZR2,  lockit     ;branch if lock wasn't 0
         ~~~
+       - An example to explain why the spin lock code above works:
+        | Step| P0  | p1  | p2  |  Coherence state of lock at end of step | Bus/directory activity|
+         | --- | --- | --- | --- | --- | --- |
+         | 1   | Has lock | Begins spin, testing if lock = 0 | Begins spin, testing if lock = 0 | Shared | Cache misses for P1 and P2 satisfied in either order. Lock state becomes shared |
+         | 2   | Set lock to 0 | Invalidated received | Invalidated received | Exclusive (p0) | Write invalidate of lock variable from P0
+         | 3 | | Cache miss | Cache miss | Shared | Bus/directory services P2 cache miss; write-back from P0; state shared
+         | 4 | | Waits while bus/directory busy | Lock = 0 test succeeds | shared | Cache miss for P2 satisfied  
+         | 5 || Lock = 0 | Execute swap, gets cache miss | shared | Cache miss for P1 satisfied
+         | 6 ||Execute swap, gets cache miss | completes swap; return 0 and sets lock = 1 | Exclusive(P2) | Bus/directory services P1 cache miss; send invalidate and generates write-back from P2
+         |7||Swap completes and return 1, and sets lock = 1|Enter critical section | Exclusive P1 | Bus/directory services P1 cache miss; sends invalidate and generate write-back from P2
+         |8||Spins, testing if lock = 0 | | |None
+
        - How the new spin lock code utilizes the cache coherence:
          - When multiple processes try to lock a variable using an atomic swap, if one process with the lock stores a 0 into the lock, all other caches are invalidated and must fetch the new value to update their copy of lock. After update, other processes will find that lock is already taken.
 

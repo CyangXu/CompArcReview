@@ -156,4 +156,70 @@
        - GPU: multithreaded
      - Handle condition:
        - vector architecture: by software
-       - GPU: by hardware 
+       - GPU: by hardware
+
+### 5 Detecting and enhancing loop-level parallelism
+  - Loop carried dependence
+    - Example 1
+    ~~~
+    for(i=0; i <100; i=i+1) {
+      A[i+1] = A[i] + C[i];
+      B[i+1] = B[i] + A[i+1];
+    }
+    ~~~
+    Two dependences exist in this example:
+      - S1 uses a value computed by S1 in an earlier iteration.
+      - S2 uses the value A[i+1] computed by S1 in the same iteration.
+    The first one is a loop carried dependency. The second one is not. It does not break the parallelism.
+
+    - Example 2
+    ~~~
+    for(i=0; i <100; i=i+1) {
+      A[i] = A[i] + B[i];
+      B[i+1] = C[i] + D[i];
+    }
+    ~~~
+    Dependency can be eliminated by the following code block:
+    ~~~
+    A[0] = A[0] + B[0];
+    for(i=0; i<99; i=i+1) {
+      B[i+1] = C[i] + D[i];
+      A[i+1] = A[i+1] + B[i+1];
+    }
+    B[100] = C[99] + D[99];
+    ~~~
+
+  - One simple to find dependences in for-loop
+    - Assume that array indices are affine. Determining whether there is a dependence between two references to the same array in a loop is thus equivalent to determining whether two affine functions can have the same value for different indices between the bounds of the loop.
+    - A dependence exists if two conditions hold:
+      - There are two iteration indices, j and k, that are both within the limits of the for loop. That is, m <= j <= n, m <= k <= n.
+      - The loop stores into an array element indexed by a * j + b and later fetches from that same array element when it is indexed by c * k + d. That is a * j + b = c * k + d.
+    - If a, b, c and d are all constants, if a loop-carried dependence exists, then GCD(c,a) must divide (d-b).
+    - In general, determining whether a dependence actually exists is NP-complete.
+  - One example about types of dependeces
+    -
+    ~~~
+    for(i=0; i<100; i=i+1) {
+      Y[i] = X[i] / c; /* S1 */
+      X[i] = X[i] + c; /* S2 */
+      Z[i] = Y[i] + c; /* S3 */
+      Y[i] = c - Y[i]; /* S4 */
+    }
+    ~~~  
+    Following dependences exist in the above code block:
+      - True dependences from S1 to S3 and from S1 to S4.
+      - Antidependence from S1 to S2.
+      - Antidependence from S3 to S4.
+      - Output dependence from S1 to S4.
+
+### 6 Cross cutting issues
+  - Energy and DLP: show and wide versus fast and narrow
+    - DLP has more computation resources and lower clock rate to maintain the computation power while reducing the energy usage.
+    - DLP has simpler control logic compared with ILP.
+  - Banked memory and graphics memory
+  - Strided accesses and TLB misses
+  - Several issues for GPU in the future:
+    - Virtualizable GPUs
+    - Relatively small size of GPU memory
+    - Direct I/O to GPU memory
+    - Unified physical memories 
