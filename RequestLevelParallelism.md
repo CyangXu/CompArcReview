@@ -1,5 +1,18 @@
 ## Request-level parallelism
+<!-- MDTOC maxdepth:6 firsth1:1 numbering:0 flatten:0 bullets:1 updateOnSave:1 -->
 
+   - [Request-level parallelism](#request-level-parallelism)   
+      - [1 Introduction](#1-introduction)   
+      - [2 Computer architecture of warehouse-scale computers](#2-computer-architecture-of-warehouse-scale-computers)   
+      - [3 Physical infrastructure and costs of warehouse-scale computers](#3-physical-infrastructure-and-costs-of-warehouse-scale-computers)   
+      - [4 Measuring efficiency of a WSC](#4-measuring-efficiency-of-a-wsc)   
+      - [5 Cloud computing: the return of utility computing](#5-cloud-computing-the-return-of-utility-computing)   
+      - [6  Amazon web services](#6-amazon-web-services)   
+      - [7 Crosscutting issues](#7-crosscutting-issues)   
+      - [8 Putting it all together: A Google warehouse-scale computer](#8-putting-it-all-together-a-google-warehouse-scale-computer)   
+      - [9 Fallacies and pitfalls](#9-fallacies-and-pitfalls)   
+
+<!-- /MDTOC -->
 ### 1 Introduction
   - Goals and requirements shared between WSC architects and server architects:
     - Cost-performance
@@ -28,6 +41,7 @@
   - WSC Memory hierarchy
     - Most applications fit on a single array within a WSC. Those that need more than one array use sharding or partitioning, meaning that the dataset is split into independent pieces and then distributed to different arrays.
     - For block transfers outside a single server, it does not matter whether the data are in memory or on disk since the rack switch and array switch are the bottlenecks.
+
   |Data(2009) |Local|Rack|Array
   |---|---|---|---|
   |DRAM latency (ms)| 0.1 | 100 | 300

@@ -197,6 +197,7 @@
                  BNEZR2,  lockit     ;branch if lock wasn't 0
         ~~~
        - An example to explain why the spin lock code above works:
+       
         | Step| P0  | p1  | p2  |  Coherence state of lock at end of step | Bus/directory activity|
          | --- | --- | --- | --- | --- | --- |
          | 1   | Has lock | Begins spin, testing if lock = 0 | Begins spin, testing if lock = 0 | Shared | Cache misses for P1 and P2 satisfied in either order. Lock state becomes shared |
