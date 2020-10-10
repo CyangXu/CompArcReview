@@ -231,3 +231,6 @@ Compiler-controlled prefetching||+|+||3|Needs nonblocking cache; possible instru
 ### 23 I/O cache coherency
   - Usually use write-through between I/O device and memory
   - Usually ensures that no blocks of the input buffer are in the cache
+
+### Apendix:
+  - Memory accesses consist of instruction accesses and data accesses.
