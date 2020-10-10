@@ -5,7 +5,7 @@
   - [1. Introduction](#1-introduction)
   - [2. Classify instruction set architectures](#2-classify-instruction-set-architectures)
   - [3 Memory addressing](#3-memory-addressing)
-  - [4 Operations in the instruction set.](#4-operations-in-the-instruction-set)
+  - [4 Operations in the instruction set](#4-operations-in-the-instruction-set)
   - [5 Instructions for control flow](#5-instructions-for-control-flow)
   - [6 Encoding an instruction set](#6-encoding-an-instruction-set)
   - [7 Crosscutting Issues: The Role of Compilers](#7-crosscutting-issues-the-role-of-compilers)
